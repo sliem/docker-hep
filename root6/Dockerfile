@@ -19,7 +19,7 @@ ENV PATH "${PATH}:/root/bin"
 ENV tarball root_v6.08.02.Linux-ubuntu16-x86_64-gcc5.4.tar.gz
 
 WORKDIR /
-RUN wget https://root.cern.ch/download/${tarball}
+RUN wget --no-check-certificate https://root.cern.ch/download/${tarball}
 RUN tar -xzf ${tarball}
 RUN rm ${tarball}
 
