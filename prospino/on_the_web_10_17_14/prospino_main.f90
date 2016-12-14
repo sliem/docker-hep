@@ -7,9 +7,11 @@ program main
   real(kind=double)                    :: energy_in
   logical                              :: lfinal
   character(len=2)                     :: final_state_in
+  character(len=32)                    :: arg
+  integer                              :: stat
 
 !----------------------------------------------------------------------------
-  inlo = 1       ! specify LO only[0] or complete NLO (slower)[1]           !
+!  inlo = 1       ! specify LO only[0] or complete NLO (slower)[1]          !
 !                ! results: LO     - LO, degenerate squarks, decoupling on  !
 !                !          NLO    - NLO, degenerate squarks, decoupling on !
 !                !          LO_ms  - LO, free squark masses, decoupling off !
@@ -17,24 +19,54 @@ program main
 !                ! all numerical errors (hopefully) better than 1%          !
 !                ! follow Vegas iteration on screen to check                !
 !----------------------------------------------------------------------------
+  call getarg(1, arg)
+  read (arg, *, iostat=stat) inlo
+  if (.not. stat == 0) then
+    write (0,*) 'inlo must be integer'
+    stop 1
+  endif
 
 !----------------------------------------------------------------------------
-  isq_ng_in = 1     ! specify degenerate [0] or free [1] squark masses      !
+!  isq_ng_in = 1     ! specify degenerate [0] or free [1] squark masses     !
                     ! [0] means Prospino2.0 with average squark masses      !
                     ! [0] invalidates isquark_in switch                     !
 !----------------------------------------------------------------------------
+  call getarg(2, arg)
+  read (arg, *, iostat=stat) isq_ng_in
+  if (.not. stat == 0) then
+    write (0,*) 'isq_ng_in must be integer'
+    stop 1
+  endif
 
 !----------------------------------------------------------------------------
-  icoll_in = 1      ! collider : tevatron[0], lhc[1]                        !
-  energy_in = 14000 ! collider energy in GeV                                !
+!  icoll_in = 1      ! collider : tevatron[0], lhc[1]                       !
+!  energy_in = 14000 ! collider energy in GeV                               !
 !----------------------------------------------------------------------------
+  call getarg(3, arg)
+  read (arg, *, iostat=stat) icoll_in
+  if (.not. stat == 0) then
+    write (0,*) 'icoll_in must be integer'
+    stop 1
+  endif
+  call getarg(4, arg)
+  read (arg, *, iostat=stat) energy_in
+  if (.not. stat == 0) then
+    write (0,*) 'energy_in must be integer'
+    stop 1
+  endif
 
 !----------------------------------------------------------------------------
-  i_error_in = 0    ! with central scale [0] or scale variation [1]         !
+!  i_error_in = 0    ! with central scale [0] or scale variation [1]        !
 !----------------------------------------------------------------------------
+  call getarg(5, arg)
+  read (arg, *, iostat=stat) i_error_in
+  if (.not. stat == 0) then
+    write (0,*) 'i_error_in must be integer'
+    stop 1
+  endif
 
 !----------------------------------------------------------------------------
-  final_state_in = 'nn'                                                     !
+!  final_state_in = 'nn'                                                    !
 !                                                                           !
 !                   ng     neutralino/chargino + gluino                     !
 !                   ns     neutralino/chargino + squark                     !
@@ -53,10 +85,11 @@ program main
 !                                                                           !
 !  squark and antisquark added, but taking into account different sb or ss  !
 !----------------------------------------------------------------------------
+  call getarg(6, final_state_in)
 
 !----------------------------------------------------------------------------
-  ipart1_in = 5                                                             !
-  ipart2_in = 7                                                             !
+!  ipart1_in = 5                                                            !
+!  ipart2_in = 7                                                            !
 !                                                                           !
 !  final_state_in = ng,ns,nn                                                !
 !  ipart1_in   = 1,2,3,4  neutralinos                                       !
@@ -89,10 +122,22 @@ program main
 !  note: otherwise ipart1_in,ipart2_in have to set to one if not used       !
 !                                                                           !
 !----------------------------------------------------------------------------
+  call getarg(7, arg)
+  read (arg, *, iostat=stat) ipart1_in
+  if (.not. stat == 0) then
+    write (0,*) 'ipart1_in must be integer'
+    stop 1
+  endif
+  call getarg(8, arg)
+  read (arg, *, iostat=stat) ipart2_in
+  if (.not. stat == 0) then
+    write (0,*) 'ipart2_in must be integer'
+    stop 1
+  endif
 
 !----------------------------------------------------------------------------
-  isquark1_in = 0                                                           !
-  isquark2_in = 0                                                           !
+!  isquark1_in = 0                                                          !
+!  isquark2_in = 0                                                          !
 !                                                                           !
 !  for LO with light-squark flavor in the final state                       !
 !  isquark1_in     =  -5,-4,-3,-2,-1,+1,+2,+3,+4,+5                         !
@@ -106,18 +151,30 @@ program main
 !  flavors in final state: light-flavor quarks summed over five flavors     !
 !                                                                           !
 !----------------------------------------------------------------------------
-  
+  call getarg(9, arg)
+  read (arg, *, iostat=stat) isquark1_in
+  if (.not. stat == 0) then
+    write (0,*) 'isquark1_in must be integer'
+    stop 1
+  endif
+  call getarg(10, arg)
+  read (arg, *, iostat=stat) isquark2_in
+  if (.not. stat == 0) then
+    write (0,*) 'isquark2_in must be integer'
+    stop 1
+  endif
+
   call PROSPINO_OPEN_CLOSE(0)                                                            ! open all input/output files
-  
+
   call PROSPINO_CHECK_HIGGS(final_state_in)                                              ! lock Higgs final states
-  call PROSPINO_CHECK_FS(final_state_in,ipart1_in,ipart2_in,lfinal)                      ! check final state 
+  call PROSPINO_CHECK_FS(final_state_in,ipart1_in,ipart2_in,lfinal)                      ! check final state
   if (.not. lfinal ) then
-     print*, " final state not correct ",final_state_in,ipart1_in,ipart2_in
+     write (0,*) " final state not correct ",final_state_in,ipart1_in,ipart2_in
      call HARD_STOP                                                                      ! finish if final state bad
   end if
 
   call PROSPINO(inlo,isq_ng_in,icoll_in,energy_in,i_error_in,final_state_in,ipart1_in,ipart2_in,isquark1_in,isquark2_in) ! actual prospino call
-        
+
 !----------------------------------------------------------------------------
 !  input file: prospino.in.leshouches                                       !
 !              use block MASS for masses, plus low-energy mixing matrices   !
@@ -126,7 +183,7 @@ program main
 !               prospino.dat2  for long output including subchannels        !
 !               prospino.dat3  lo file for masses, flags, etc               !
 !----------------------------------------------------------------------------
-  call PROSPINO_OPEN_CLOSE(1)                                                            ! close all input/output files 
+  call PROSPINO_OPEN_CLOSE(1)                                                            ! close all input/output files
 
 end program main
 
