@@ -1,6 +1,6 @@
 # for documentation please look at files in ./Pro2_doc/
 #
-# for a free and powerful f90 compiler please check out gfortran 
+# for a free and powerful f90 compiler please check out gfortran
 # Prospino2.1 is now tested on Mac OS-X 10.5 gfortran (gcc-4.3.0)
 #
 # f90 compilers which are tested: Intel, Dec, Portland Group, NAG, gfortran
@@ -10,9 +10,9 @@
 # these options needed for the NAG compiler
 #OPTION = -ieee=full -gline -dcfuns#
 #
-# paths, compiler, etc -> feel free to edit 
+# paths, compiler, etc -> feel free to edit
 #
-COMP   = gfortran
+COMP   = gfortran -static
 DIRECT = ./
 #
 # no editing should be required below, unless you want to change the pdf set
@@ -43,10 +43,10 @@ FILES_MACROS = ${MACROS}Xsugra.o \
                ${MACROS}Xrunning_mass.o \
                ${MACROS}Xvegas_array.o \
 	       ${MACROS}Xread_les_houches.o \
-	       ${MACROS}Cteq6Pdf-2008.o 
-#tq5	       ${MACROS}XCtq5Pdf.o 
-#tq6	       ${MACROS}XCteq61Pdf.o 
-#tqx	       ${MACROS}Cteq6Pdf-2008.o 
+	       ${MACROS}Cteq6Pdf-2008.o
+#tq5	       ${MACROS}XCtq5Pdf.o
+#tq6	       ${MACROS}XCteq61Pdf.o
+#tqx	       ${MACROS}Cteq6Pdf-2008.o
 FILES_INTEGS = ${INTEGS}Xtwopoint.o \
 	       ${INTEGS}Xthreepoint.o \
 	       ${INTEGS}Xfourpoint.o \
@@ -67,7 +67,7 @@ FILES_INTEGS = ${INTEGS}Xtwopoint.o \
 	       ${MACROS}Xscalar_array_lq.o \
 	       ${MACROS}Xscalar_array_le.o \
 	       ${MACROS}Xscalar_array_hh.o \
-	       ${MACROS}Xscalar_array_ht.o 
+	       ${MACROS}Xscalar_array_ht.o
 FILES_MATRIX = ${MATRIX}Xmatrix_ng_v.o \
 	       ${MATRIX}Xmatrix_ng_r.o \
 	       ${MATRIX}Xmatrix_ng_c.o \
@@ -122,7 +122,7 @@ FILES_STRONG = ${STRONG}hadrongg.o \
 	       ${STRONG}matrixsb.o \
 	       ${STRONG}matrixsg.o \
 	       ${STRONG}matrixss.o \
-	       ${STRONG}matrixst.o 
+	       ${STRONG}matrixst.o
 #
 # build the prospino executable
 #
@@ -131,7 +131,7 @@ prospino:	prospino_main.f90  ${FILES_DIRECT} \
                                    ${FILES_MATRIX} \
                                    ${FILES_INTEGS} \
                                    ${FILES_STRONG} \
-                                   ${FILES_INTERF} 
+                                   ${FILES_INTERF}
 	${COMP} prospino_main.f90  ${FILES_DIRECT} \
 	                           ${FILES_MACROS} \
                                    ${FILES_MATRIX} \
@@ -146,7 +146,7 @@ validate:	     validate.f90  ${FILES_DIRECT} \
                                    ${FILES_MATRIX} \
                                    ${FILES_INTEGS} \
                                    ${FILES_STRONG} \
-                                   ${FILES_INTERF} 
+                                   ${FILES_INTERF}
 	${COMP}      validate.f90  ${FILES_DIRECT} \
 	                           ${FILES_MACROS} \
                                    ${FILES_MATRIX} \
@@ -165,10 +165,10 @@ clean:
 	rm -i ${INTEGS}*.o ; rm -i ${INTEGS}*~ ; \
 	rm -i ${MATRIX}*.o ; rm -i ${MATRIX}*~ ; \
 	rm -i ${STRONG}*.o ; rm -i ${STRONG}*~ ; \
-	rm -i ${INTERF}*.o ; rm -i ${INTERF}*~   
+	rm -i ${INTERF}*.o ; rm -i ${INTERF}*~
 #
 # prepare all the object files from the main directory [DIRECT]
-# for DEC compiler keep them in order of dependence 
+# for DEC compiler keep them in order of dependence
 #
 ${DIRECT}%.o:  ${DIRECT}%.f90
 	${COMP} -c -o $@ $<
