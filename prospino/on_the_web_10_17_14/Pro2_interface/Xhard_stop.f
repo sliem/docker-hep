@@ -9,6 +9,6 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       subroutine HARD_STOP
 
       print*, " HARD_STOP: code stopped, fatal and serious error "
-      stop
+      stop 1
 
-      end 
+      end
