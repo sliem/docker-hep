@@ -23,3 +23,4 @@ RUN wget --no-check-certificate https://root.cern.ch/download/${tarball}
 RUN tar -xzf ${tarball}
 RUN rm ${tarball}
 
+RUN apt-get --yes clean
