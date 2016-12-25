@@ -11,40 +11,40 @@ name = ../lib/libSPheno.a
 
 # Intels ifort, default in optimized mode
 F90 = ifort
-comp = -c -O -module ${Mdir} -I${InDir} 
-LFlagsB = -O  
+comp = -c -O -module ${Mdir} -I${InDir}
+LFlagsB = -O
 
 # Intels ifort, debug modus
 ifeq (${F90},ifortg)
  F90 = ifort
- comp = -c -g -module ${Mdir} -I${InDir} 
- LFlagsB = -g  
+ comp = -c -g -module ${Mdir} -I${InDir}
+ LFlagsB = -g
 endif
 
 # gfortran
 ifeq (${F90},gfortran)
- comp = -c -O -J${Mdir} -I${InDir}
- LFlagsB = -O  
+ comp = -c -O -J${Mdir} -I${InDir} -static
+ LFlagsB = -O -static
 endif
 
-# g95 
+# g95
 ifeq (${F90},g95)
  comp = -c -O -fmod=${Mdir} -I${InDir}
- LFlagsB = -O  
+ LFlagsB = -O
 endif
 
 # Lahey F95 compiler
 ifeq (${F90},lf95)
  comp = -c -O -M ${Mdir} -I${InDir}
- LFlagsB = -O  
-endif
- 
-# NAG f95/2003
-ifeq (${F90},nagfor)
- comp = -c -O  -DONLYDOUBLE -mdir ${Mdir} -I${InDir}   
  LFlagsB = -O
 endif
- 
+
+# NAG f95/2003
+ifeq (${F90},nagfor)
+ comp = -c -O  -DONLYDOUBLE -mdir ${Mdir} -I${InDir}
+ LFlagsB = -O
+endif
+
 .SUFFIXES : .o .ps .f90 .F90 .a
 bin/SPheno: ${name} SPheno3.o
 	${F90} -o SPheno ${LFlagsB} SPheno3.o ../lib/${name}
@@ -60,7 +60,7 @@ ${name}: ${name}(Control.o)  ${name}(Mathematics.o)  ${name}(RGEs.o)       \
   ${name}(EplusEminusProduction.o) ${name}(TwoLoopHiggsMass.o) \
   ${name}(LoopMasses.o) ${name}(SugraRuns.o) ${name}(Experiment.o) \
   ${name}(LowEnergy.o) ${name}(NMSSM_tools.o) ${name}(RPtools.o) \
-  ${name}(LHC_observables.o) ${name}(InputOutput.o) 
+  ${name}(LHC_observables.o) ${name}(InputOutput.o)
 clean:
 	rm -f *.o *~ */*.o */*~
 cleanall:
@@ -76,8 +76,8 @@ cleanall:
 	${F90} ${comp}  ${PreDef} $<
 	ar -ruc $@ $*.o
 	rm -f $*.o
-.f90.o: 
-	${F90} ${comp}  $< 
+.f90.o:
+	${F90} ${comp}  $<
 .f90.ps:
 	a2ps  -o $*.ps $<
 .h.ps:
