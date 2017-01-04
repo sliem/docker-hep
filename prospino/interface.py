@@ -35,7 +35,6 @@ def xsec(args, slha):
 
     try:
         o = subprocess.check_output(command, stderr=subprocess.STDOUT, cwd=workdir)
-        print(o)
     except subprocess.CalledProcessError as e:
         raise Exception('prospino: ' + str(e) + ':\n' + e.output)
 
