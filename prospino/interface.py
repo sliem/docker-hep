@@ -48,9 +48,9 @@ def parse_prospino_output(dat, dat3):
 
     r = {}
 
-    r['CROSSLO']      = float(l[9])
+    r['CROSSLO']      = float(l[14])
     r['CROSSLOERR']   = float(l[10])
-    r['CROSSNLO']     = float(l[11])
+    r['CROSSNLO']     = float(l[15])
     r['CROSSNLOERR']  = float(l[12])
     r['KFACTOR'] = float(l[13])
 
